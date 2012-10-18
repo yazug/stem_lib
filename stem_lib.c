@@ -250,43 +250,50 @@ void delete_all_storage()
 
 }
 
-void prettyprintTree(node * head, const char * prefix)
+size_t prettyprintTree(node * head, const char * prefix)
 {
+    size_t num_nodes = 0;
     if(head && prefix)
     {
-        printf("%lld %s %s\n",head->count,prefix,head->stem);
+        printf("%lld|%s %s|\n",head->count,prefix,head->stem);
+	num_nodes ++;
 
         if(head->right)
         {
-            prettyprintTree(head->right,prefix);
+            num_nodes += prettyprintTree(head->right,prefix);
         }
 
         if(head->down)
         {
             char word[40] = {0};
             snprintf(word,sizeof(word),"%s%s",prefix,head->stem);
-            prettyprintTree(head->down,word);
+            num_nodes += prettyprintTree(head->down,word);
         }
     }
+    return num_nodes;
 }
 
-void prettyprintEntries(node * head, const char * prefix)
+size_t prettyprintEntries(node * head, const char * prefix)
 {
+    size_t num_nodes = 0;
     if(head && prefix)
     {
-        printf("%lld %s%s\n",head->count,prefix,head->stem);
+	if(head->count > 0)
+		printf("%lld|%s%s|\n",head->count,prefix,head->stem);
+	num_nodes++;
 
         if(head->right)
         {
-            prettyprintEntries(head->right,prefix);
+            num_nodes += prettyprintEntries(head->right,prefix);
         }
 
         if(head->down)
         {
-            char word[40] = {0};
+            char word[1024] = {0};
             snprintf(word,sizeof(word),"%s%s",prefix,head->stem);
-            prettyprintEntries(head->down,word);
+            num_nodes += prettyprintEntries(head->down,word);
         }
     }
+    return num_nodes;
 }
 

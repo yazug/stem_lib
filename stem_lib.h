@@ -18,7 +18,7 @@ node * count(node * head, const char * stem, int64_t word_count);
 int64_t find_node(node * head, const char * stem);
 void delete_nodes(node * head);
 node * new_node(const char * stem, int64_t count);
-void prettyprintEntries(node * head, const char * prefix);
-void prettyprintTree(node * head, const char * prefix);
+size_t prettyprintEntries(node * head, const char * prefix);
+size_t prettyprintTree(node * head, const char * prefix);
 
 void delete_all_storage(void);

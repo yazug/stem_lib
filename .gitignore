@@ -11,8 +11,13 @@
 *.la
 *.a
 
+# editor and env stuff
+*.swp
 .sconsign.dblite
 .kdbgrc.runner
 
+# Compiled Apps
 count_terms
 runner
+
+# Other

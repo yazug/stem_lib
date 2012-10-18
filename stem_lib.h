@@ -18,4 +18,6 @@ node * count(node * head, char * remainder);
 int64_t find_node(node * head, char * remainder);
 void delete_nodes(node * head);
 node * new_node(char * stem, int64_t count);
+void prettyprintEntries(node * head, char * prefix);
+void prettyprintTree(node * head, char * prefix);
 

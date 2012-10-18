@@ -97,6 +97,119 @@ void test_one_empty(void)
     CU_ASSERT_EQUAL(find_node(head,"A"),1);
 }
 
+void test_double_entry_empty(void)
+{
+    delete_nodes(head);
+    head = NULL;
+
+    head = count(head,"AA");
+
+    CU_ASSERT_EQUAL(find_node(head,"AA"),1);
+}
+
+void test_double_entry_then_split(void)
+{
+    delete_nodes(head);
+    head = new_node("AA",2);
+
+    head = count(head,"A");
+
+    CU_ASSERT_EQUAL(find_node(head,"AA"),2);
+    CU_ASSERT_EQUAL(find_node(head,"A"),1);
+}
+
+void test_double_entry_one_there(void)
+{
+    delete_nodes(head);
+    head = new_node("A",2);
+
+    head = count(head,"AA");
+
+    CU_ASSERT_EQUAL(find_node(head,"AA"),1);
+    CU_ASSERT_EQUAL(find_node(head,"A"),2);
+}
+
+void test_set_data(void)
+{
+    delete_nodes(head);
+    head = new_node("A",2);
+
+    head = count(head,"AA");
+    head = count(head,"AVA");
+    head = count(head,"ADA");
+    head = count(head,"ADAM");
+    head = count(head,"AVB");
+    head = count(head,"AVC");
+    head = count(head,"AVA");
+
+    CU_ASSERT_EQUAL(find_node(head,"AA"),1);
+    CU_ASSERT_EQUAL(find_node(head,"A"),2);
+    CU_ASSERT_EQUAL(find_node(head,"AVA"),2);
+    CU_ASSERT_EQUAL(find_node(head,"ADAM"),1);
+    CU_ASSERT_EQUAL(find_node(head,"AVB"),1);
+    CU_ASSERT_EQUAL(find_node(head,"AVC"),1);
+    CU_ASSERT_EQUAL(find_node(head,"ADA"),1);
+
+#if 0
+    printf("\n\n");
+    prettyprintEntries(head,"");
+    printf("\n");
+#endif
+
+}
+
+void test_small_set_data(void)
+{
+    delete_nodes(head);
+    head = new_node("A",2);
+
+    head = count(head,"AA");
+    head = count(head,"AVA");
+    head = count(head,"AVB");
+    head = count(head,"AVC");
+    head = count(head,"AVA");
+
+    CU_ASSERT_EQUAL(find_node(head,"AVA"),2);
+    CU_ASSERT_EQUAL(find_node(head,"AVB"),1);
+    CU_ASSERT_EQUAL(find_node(head,"AVC"),1);
+}
+
+void test_add_long_long_keyword(void)
+{
+    delete_nodes(head);
+    head = new_node("ABCDEFGHIJKLMNOP",2);
+
+    CU_ASSERT_EQUAL(find_node(head,"ABCDEFGHIJKLMNOP"),2);
+
+    printf("\n\n");
+    prettyprintTree(head,"");
+    printf("\n");
+}
+
+void test_long_set_data(void)
+{
+    delete_nodes(head);
+    head = new_node("A",2);
+
+    head = count(head,"AAAAAAA");
+    head = count(head,"AVA");
+    head = count(head,"AVB");
+    head = count(head,"BETA");
+    head = count(head,"ZETA");
+    head = count(head,"AVC");
+    head = count(head,"AVA");
+    head = count(head,"AAAAAAA");
+    head = count(head,"ABCDEFGHIJ");
+
+    CU_ASSERT_EQUAL(find_node(head,"AAAAAAA"),2);
+    CU_ASSERT_EQUAL(find_node(head,"BETA"),1);
+    CU_ASSERT_EQUAL(find_node(head,"ZETA"),1);
+    CU_ASSERT_EQUAL(find_node(head,"ABCDEFGHIJ"),1);
+
+    printf("\n\n");
+    prettyprintTree(head,"");
+    printf("\n");
+}
 /* The main() function for setting up and running the tests.
  * Returns a CUE_SUCCESS on successful running, another
  * CUnit error code on failure.
@@ -123,7 +236,13 @@ int main()
            (NULL == CU_add_test(pSuite, "test of NULL stem find", test_null_stem_stem)) ||
            (NULL == CU_add_test(pSuite, "test of initial case", test_initial_case)) ||
            (NULL == CU_add_test(pSuite, "test of add existing case", test_add_existing)) ||
-           (NULL == CU_add_test(pSuite, "test of add one on empty case", test_one_empty))
+           (NULL == CU_add_test(pSuite, "test of add one on empty case", test_one_empty)) ||
+           (NULL == CU_add_test(pSuite, "test of add AA on empty case", test_double_entry_empty)) ||
+           (NULL == CU_add_test(pSuite, "test of add AA on A case", test_double_entry_one_there)) ||
+           (NULL == CU_add_test(pSuite, "test of add really long case", test_add_long_long_keyword)) ||
+           (NULL == CU_add_test(pSuite, "test of add a set of records", test_set_data)) ||
+           (NULL == CU_add_test(pSuite, "test of add a long set of records", test_long_set_data)) ||
+           (NULL == CU_add_test(pSuite, "test of add a smaller set of records", test_small_set_data))
       )
    {
       CU_cleanup_registry();

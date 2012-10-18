@@ -26,6 +26,8 @@ node * split(node * head, char * remainder)
         {
             new_node->stem[j++] = head->stem[i];
             head->stem[i] = '\0';
+            new_node->count = head->count;
+            head->count = 0;
         }
         new_node->down = head->down;
         head->down = new_node;
@@ -52,15 +54,22 @@ node * count(node * head, char * stem)
     }
     else if(head && stem)
     {
-        int found = 0;
         node * cur = head;
         node * prev = cur;
-        while(!found && cur)
+        while(cur)
         {
             if(cur->stem[0] < stem[0])
             {
-                prev = cur;
-                cur = (node*)(cur->right);
+                if(cur->right)
+                {
+                    prev = cur;
+                    cur = (node*)(cur->right);
+                }
+                else
+                {
+                    cur->right = new_node(stem,1);
+                    break;
+                }
                 continue;
             }
             else if(cur->stem[0] > stem[0])
@@ -79,6 +88,14 @@ node * count(node * head, char * stem)
                 if(stem[i] == '\0')
                 {
                     cur->count ++;
+                }
+                else
+                {
+                    if(cur->stem[i] != '\0')
+                    {
+                        cur = split(cur,stem);
+                    }
+                    cur->down = count(cur->down,&stem[i]);
                 }
 
                 break;
@@ -117,6 +134,10 @@ int64_t find_node(node * head, char * stem)
                 {
                     count = cur->count;
                 }
+                else
+                {
+                    count = find_node(cur->down, &stem[i]);
+                }
                 break;
             }
         }
@@ -145,21 +166,66 @@ void delete_nodes(node * head)
 
 node * new_node(char * stem, int64_t count)
 {
-    node * new_node = NULL;
+    node * next_node = NULL;
     if(stem)
     {
-        new_node = (node*)malloc(sizeof(node));
+        next_node = (node*)malloc(sizeof(node));
 
-        if(new_node)
+        if(next_node)
         {
-            memset(new_node,0,sizeof(node));
-            snprintf(new_node->stem,sizeof(new_node->stem),"%s",stem);
-            if(0 == strcmp(new_node->stem,stem))
+            memset(next_node,0,sizeof(node));
+            snprintf(next_node->stem,sizeof(next_node->stem),"%s",stem);
+            if(0 == strcmp(next_node->stem,stem))
             {
-                new_node->count = count;
+                next_node->count = count;
+            }
+            else if(strlen(stem) > strlen(next_node->stem))
+            {
+                next_node->down = new_node(&stem[strlen(next_node->stem)],count);
             }
         }
     }
-    return new_node;
+    return next_node;
+}
+
+
+void prettyprintTree(node * head, char * prefix)
+{
+    if(head && prefix)
+    {
+        printf("%lld %s %s\n",head->count,prefix,head->stem);
+
+        if(head->right)
+        {
+            prettyprintTree(head->right,prefix);
+        }
+
+        if(head->down)
+        {
+            char word[40] = {0};
+            snprintf(word,sizeof(word),"%s%s",prefix,head->stem);
+            prettyprintTree(head->down,word);
+        }
+    }
+}
+
+void prettyprintEntries(node * head, char * prefix)
+{
+    if(head && prefix)
+    {
+        printf("%lld %s%s\n",head->count,prefix,head->stem);
+
+        if(head->right)
+        {
+            prettyprintEntries(head->right,prefix);
+        }
+
+        if(head->down)
+        {
+            char word[40] = {0};
+            snprintf(word,sizeof(word),"%s%s",prefix,head->stem);
+            prettyprintEntries(head->down,word);
+        }
+    }
 }
 

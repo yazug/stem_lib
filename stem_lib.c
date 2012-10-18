@@ -145,6 +145,19 @@ int64_t find_node(node * head, const char * stem)
     return count;
 }
 
+struct memblock
+{
+    void * next_block;
+    void * memory;
+    size_t sizeof_memory;
+};
+
+struct memblock * block_list = NULL;
+node * free_list = NULL;
+
+/**
+ * Cleanup the head and put all of the nodes in a free list
+ */
 void delete_nodes(node * head)
 {
     if(head)
@@ -159,7 +172,31 @@ void delete_nodes(node * head)
             delete_nodes(head->right);
             head->right = NULL;
         }
-        free(head);
+        head->right = free_list;
+        free_list = head;
+    }
+}
+
+void add_more_nodes_to_freelist(size_t num_nodes)
+{
+    if( num_nodes > 0)
+    {
+        struct memblock * block = (struct memblock*)malloc(sizeof(struct memblock));
+        if(block)
+        {
+            size_t i;
+
+            memset(block,0,sizeof(struct memblock));
+            block->sizeof_memory = sizeof(node)*num_nodes;
+            block->memory = malloc(block->sizeof_memory);
+            memset(block->memory,0,block->sizeof_memory);
+            node * next_node = (node*)block->memory;
+            for(i = 0; i< num_nodes; i++)
+            {
+                next_node[i].right = free_list;
+                free_list = &next_node[i];
+            }
+        }
     }
 }
 
@@ -168,7 +205,12 @@ node * new_node(const char * stem, int64_t count)
     node * next_node = NULL;
     if(stem)
     {
-        next_node = (node*)malloc(sizeof(node));
+        if(free_list == NULL)
+            add_more_nodes_to_freelist(1000);
+
+        // pop off one from the free list
+        next_node = free_list;
+        free_list = (next_node?next_node->right:NULL);
 
         if(next_node)
         {
@@ -187,6 +229,26 @@ node * new_node(const char * stem, int64_t count)
     return next_node;
 }
 
+void delete_all_storage()
+{
+    while(block_list)
+    {
+        struct memblock * block = block_list;
+
+        block_list = block_list->next_block;
+        if(block)
+        {
+            free(block->memory);
+            block->memory = NULL;
+            block->sizeof_memory = 0;
+            block->next_block = NULL;
+            free(block);
+        }
+    }
+
+    free_list = NULL;
+
+}
 
 void prettyprintTree(node * head, const char * prefix)
 {

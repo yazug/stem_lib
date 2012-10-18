@@ -21,3 +21,4 @@ node * new_node(const char * stem, int64_t count);
 void prettyprintEntries(node * head, const char * prefix);
 void prettyprintTree(node * head, const char * prefix);
 
+void delete_all_storage(void);

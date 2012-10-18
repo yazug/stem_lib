@@ -10,43 +10,42 @@
 //
 //
 //
-node * split(node * head, char * remainder)
+node * split(node * head, const char * stem)
 {
     if(head)
     {
         size_t i=0;
         size_t j=0;
-        node * new_node = (node*)malloc(sizeof(node));
-        memset(new_node,0,sizeof(node));
+        node * next_node = new_node("",0);
 
-        while(head->stem[i] == remainder[i] && remainder[i] != '\0' && i < sizeof(head->stem))
+        while(head->stem[i] == stem[i] && stem[i] != '\0' && i < sizeof(head->stem))
             i++;
 
         while(head->stem[i] != '\0'  && i < sizeof(head->stem))
         {
-            new_node->stem[j++] = head->stem[i];
+            next_node->stem[j++] = head->stem[i];
             head->stem[i] = '\0';
-            new_node->count = head->count;
+            next_node->count = head->count;
             head->count = 0;
         }
-        new_node->down = head->down;
-        head->down = new_node;
+        next_node->down = head->down;
+        head->down = next_node;
     }
     return head;
 }
 
-node * add(node * head, char * stem)
+node * add(node * head, const char * stem, int64_t word_count)
 {
     if(head && stem)
     {
-        node * next_node = new_node(stem,1);
+        node * next_node = new_node(stem,word_count);
         next_node->right = head->right;
         head->right = next_node;
     }
     return head;
 }
 
-node * count(node * head, char * stem)
+node * count(node * head, const char * stem, int64_t word_count)
 {
     if(NULL == head)
     {
@@ -67,14 +66,14 @@ node * count(node * head, char * stem)
                 }
                 else
                 {
-                    cur->right = new_node(stem,1);
+                    cur->right = new_node(stem,word_count);
                     break;
                 }
                 continue;
             }
             else if(cur->stem[0] > stem[0])
             {
-                prev = add(prev,stem);
+                prev = add(prev,stem,word_count);
                 break;
             }
             else
@@ -87,7 +86,7 @@ node * count(node * head, char * stem)
 
                 if(stem[i] == '\0')
                 {
-                    cur->count ++;
+                    cur->count += word_count;
                 }
                 else
                 {
@@ -95,7 +94,7 @@ node * count(node * head, char * stem)
                     {
                         cur = split(cur,stem);
                     }
-                    cur->down = count(cur->down,&stem[i]);
+                    cur->down = count(cur->down,&stem[i],word_count);
                 }
 
                 break;
@@ -106,7 +105,7 @@ node * count(node * head, char * stem)
 }
 
 
-int64_t find_node(node * head, char * stem)
+int64_t find_node(node * head, const char * stem)
 {
     int64_t count = 0;
 
@@ -164,7 +163,7 @@ void delete_nodes(node * head)
     }
 }
 
-node * new_node(char * stem, int64_t count)
+node * new_node(const char * stem, int64_t count)
 {
     node * next_node = NULL;
     if(stem)
@@ -189,7 +188,7 @@ node * new_node(char * stem, int64_t count)
 }
 
 
-void prettyprintTree(node * head, char * prefix)
+void prettyprintTree(node * head, const char * prefix)
 {
     if(head && prefix)
     {
@@ -209,7 +208,7 @@ void prettyprintTree(node * head, char * prefix)
     }
 }
 
-void prettyprintEntries(node * head, char * prefix)
+void prettyprintEntries(node * head, const char * prefix)
 {
     if(head && prefix)
     {

@@ -80,7 +80,7 @@ void test_add_existing(void)
     delete_nodes(head);
     head = new_node("A",1);
 
-    head = count(head,"A");
+    head = count(head,"A",1);
 
     CU_ASSERT_EQUAL(find_node(head,"A"),2);
 }
@@ -92,7 +92,7 @@ void test_one_empty(void)
     delete_nodes(head);
     head = NULL;
 
-    head = count(head,"A");
+    head = count(head,"A",1);
 
     CU_ASSERT_EQUAL(find_node(head,"A"),1);
 }
@@ -102,7 +102,7 @@ void test_double_entry_empty(void)
     delete_nodes(head);
     head = NULL;
 
-    head = count(head,"AA");
+    head = count(head,"AA",1);
 
     CU_ASSERT_EQUAL(find_node(head,"AA"),1);
 }
@@ -112,7 +112,7 @@ void test_double_entry_then_split(void)
     delete_nodes(head);
     head = new_node("AA",2);
 
-    head = count(head,"A");
+    head = count(head,"A",1);
 
     CU_ASSERT_EQUAL(find_node(head,"AA"),2);
     CU_ASSERT_EQUAL(find_node(head,"A"),1);
@@ -123,7 +123,7 @@ void test_double_entry_one_there(void)
     delete_nodes(head);
     head = new_node("A",2);
 
-    head = count(head,"AA");
+    head = count(head,"AA",1);
 
     CU_ASSERT_EQUAL(find_node(head,"AA"),1);
     CU_ASSERT_EQUAL(find_node(head,"A"),2);
@@ -134,13 +134,13 @@ void test_set_data(void)
     delete_nodes(head);
     head = new_node("A",2);
 
-    head = count(head,"AA");
-    head = count(head,"AVA");
-    head = count(head,"ADA");
-    head = count(head,"ADAM");
-    head = count(head,"AVB");
-    head = count(head,"AVC");
-    head = count(head,"AVA");
+    head = count(head,"AA",1);
+    head = count(head,"AVA",1);
+    head = count(head,"ADA",1);
+    head = count(head,"ADAM",1);
+    head = count(head,"AVB",1);
+    head = count(head,"AVC",1);
+    head = count(head,"AVA",1);
 
     CU_ASSERT_EQUAL(find_node(head,"AA"),1);
     CU_ASSERT_EQUAL(find_node(head,"A"),2);
@@ -163,11 +163,11 @@ void test_small_set_data(void)
     delete_nodes(head);
     head = new_node("A",2);
 
-    head = count(head,"AA");
-    head = count(head,"AVA");
-    head = count(head,"AVB");
-    head = count(head,"AVC");
-    head = count(head,"AVA");
+    head = count(head,"AA",1);
+    head = count(head,"AVA",1);
+    head = count(head,"AVB",1);
+    head = count(head,"AVC",1);
+    head = count(head,"AVA",1);
 
     CU_ASSERT_EQUAL(find_node(head,"AVA"),2);
     CU_ASSERT_EQUAL(find_node(head,"AVB"),1);
@@ -191,15 +191,15 @@ void test_long_set_data(void)
     delete_nodes(head);
     head = new_node("A",2);
 
-    head = count(head,"AAAAAAA");
-    head = count(head,"AVA");
-    head = count(head,"AVB");
-    head = count(head,"BETA");
-    head = count(head,"ZETA");
-    head = count(head,"AVC");
-    head = count(head,"AVA");
-    head = count(head,"AAAAAAA");
-    head = count(head,"ABCDEFGHIJ");
+    head = count(head,"AAAAAAA",1);
+    head = count(head,"AVA",1);
+    head = count(head,"AVB",1);
+    head = count(head,"BETA",1);
+    head = count(head,"ZETA",1);
+    head = count(head,"AVC",1);
+    head = count(head,"AVA",1);
+    head = count(head,"AAAAAAA",1);
+    head = count(head,"ABCDEFGHIJ",1);
 
     CU_ASSERT_EQUAL(find_node(head,"AAAAAAA"),2);
     CU_ASSERT_EQUAL(find_node(head,"BETA"),1);

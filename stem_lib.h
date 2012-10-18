@@ -12,12 +12,12 @@ typedef struct nodeTAG
 }node;
 
 
-node * split(node * head, char * remainder);
-node * add(node * head, char * remainder);
-node * count(node * head, char * remainder);
-int64_t find_node(node * head, char * remainder);
+node * split(node * head, const char * stem);
+node * add(node * head, const char * stem, int64_t word_count);
+node * count(node * head, const char * stem, int64_t word_count);
+int64_t find_node(node * head, const char * stem);
 void delete_nodes(node * head);
-node * new_node(char * stem, int64_t count);
-void prettyprintEntries(node * head, char * prefix);
-void prettyprintTree(node * head, char * prefix);
+node * new_node(const char * stem, int64_t count);
+void prettyprintEntries(node * head, const char * prefix);
+void prettyprintTree(node * head, const char * prefix);
 

@@ -15,5 +15,7 @@ typedef struct nodeTAG
 node * split(node * head, char * remainder);
 node * add(node * head, char * remainder);
 node * count(node * head, char * remainder);
-int64_t find(node * head, char * remainder);
+int64_t find_node(node * head, char * remainder);
+void delete_nodes(node * head);
+node * new_node(char * stem, int64_t count);
 

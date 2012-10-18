@@ -38,11 +38,7 @@ node * head = NULL;
 int init_suite1(void)
 {
     printf("init suite1\n");
-    if(NULL == head)
-    {
-        head = (node*)malloc(sizeof(node));
-        memset(head,0,sizeof(node));
-    }
+    return 0;
 }
 
 /* The suite cleanup function.
@@ -51,37 +47,54 @@ int init_suite1(void)
  */
 int clean_suite1(void)
 {
-    printf("clean_suite1\n");
+    printf("\n\nclean_suite1\n");
     if(NULL != head)
     {
-        free(head);
+        delete_nodes(head);
         head = NULL;
     }
+    return 0;
 }
 
-void test_add_existing(void)
+void test_null_case(void)
 {
-    head->stem[0] = 'a';
-    head->count = 1;
+    CU_ASSERT_EQUAL(find_node(NULL,"A"),0);
+}
 
-    count(head,"A");
-
-    CU_ASSERT_EQUAL(find(head,"A"),2);
+void test_null_stem_stem(void)
+{
+    head = new_node("",0);
+    CU_ASSERT_EQUAL(find_node(head,NULL),0);
 }
 
 void test_initial_case(void)
 {
-    head->stem[0] = 'a';
-    head->count = 1;
+    delete_nodes(head);
+    head = new_node("A",1);
 
-    CU_ASSERT_EQUAL(find(head,"A"),1);
+    CU_ASSERT_EQUAL(find_node(head,"A"),1);
 }
+
+void test_add_existing(void)
+{
+    delete_nodes(head);
+    head = new_node("A",1);
+
+    head = count(head,"A");
+
+    CU_ASSERT_EQUAL(find_node(head,"A"),2);
+}
+
+
 
 void test_one_empty(void)
 {
-    count(head,"A");
+    delete_nodes(head);
+    head = NULL;
 
-    CU_ASSERT_EQUAL(find(head,"A"),1);
+    head = count(head,"A");
+
+    CU_ASSERT_EQUAL(find_node(head,"A"),1);
 }
 
 /* The main() function for setting up and running the tests.
@@ -106,6 +119,8 @@ int main()
    /* add the tests to the suite */
    /* NOTE - ORDER IS IMPORTANT - MUST TEST fread() AFTER fprintf() */
    if (
+           (NULL == CU_add_test(pSuite, "test of NULL find", test_null_case)) ||
+           (NULL == CU_add_test(pSuite, "test of NULL stem find", test_null_stem_stem)) ||
            (NULL == CU_add_test(pSuite, "test of initial case", test_initial_case)) ||
            (NULL == CU_add_test(pSuite, "test of add existing case", test_add_existing)) ||
            (NULL == CU_add_test(pSuite, "test of add one on empty case", test_one_empty))

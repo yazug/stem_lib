@@ -10,3 +10,9 @@
 *.lai
 *.la
 *.a
+
+.sconsign.dblite
+.kdbgrc.runner
+
+count_terms
+runner

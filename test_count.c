@@ -53,6 +53,7 @@ int clean_suite1(void)
         delete_nodes(head);
         head = NULL;
     }
+    delete_all_storage();
     return 0;
 }
 

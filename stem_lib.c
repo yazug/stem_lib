@@ -196,6 +196,8 @@ void add_more_nodes_to_freelist(size_t num_nodes)
                 next_node[i].right = free_list;
                 free_list = &next_node[i];
             }
+            block->next_block = block_list;
+            block_list = block;
         }
     }
 }

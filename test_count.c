@@ -211,6 +211,44 @@ void test_long_set_data(void)
     prettyprintTree(head,"");
     printf("\n");
 }
+
+void test_single_entries_work()
+{
+    delete_nodes(head);
+    head = NULL;
+
+    head = count(head,"A",1);
+    head = count(head,"1",1);
+
+    CU_ASSERT_EQUAL(find_node(head,"1"),1);
+    CU_ASSERT_EQUAL(find_node(head,"A"),1);
+    CU_ASSERT_EQUAL(getNodesUsed(),2);
+}
+
+void test_dupes_numbers()
+{
+    delete_nodes(head);
+    head = new_node("A",1);
+
+    head = count(head,"1",1);
+    head = count(head,"1",1);
+
+    CU_ASSERT_EQUAL(find_node(head,"1"),2);
+    CU_ASSERT_EQUAL(find_node(head,"A"),1);
+
+}
+
+void test_add_b_then_a()
+{
+    delete_nodes(head);
+    head = new_node("B",1);
+
+    head = count(head,"A",1);
+
+    CU_ASSERT_EQUAL(find_node(head,"A"),1);
+    CU_ASSERT_EQUAL(find_node(head,"B"),1);
+}
+
 /* The main() function for setting up and running the tests.
  * Returns a CUE_SUCCESS on successful running, another
  * CUnit error code on failure.
@@ -243,6 +281,9 @@ int main()
            (NULL == CU_add_test(pSuite, "test of add really long case", test_add_long_long_keyword)) ||
            (NULL == CU_add_test(pSuite, "test of add a set of records", test_set_data)) ||
            (NULL == CU_add_test(pSuite, "test of add a long set of records", test_long_set_data)) ||
+           (NULL == CU_add_test(pSuite, "test of add a set of single numbers", test_single_entries_work)) ||
+           (NULL == CU_add_test(pSuite, "test of add a b then a", test_add_b_then_a)) ||
+           (NULL == CU_add_test(pSuite, "test of add a set of dup numbers", test_dupes_numbers)) ||
            (NULL == CU_add_test(pSuite, "test of add a smaller set of records", test_small_set_data))
       )
    {

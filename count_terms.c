@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 		FILE * fp = fopen(argv[1],"r");
 		if(fp)
 		{
-			for(i=0; i<1000; i++)
+			for(i=0; i<100000; i++)
 			{
 				char buf[1024] = {0};
 				if(NULL != fgets(buf,sizeof(buf),fp))
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 			fp = NULL;
 		}
 
-		size_t node_count = prettyprintEntries(head,"");
+		size_t node_count = prettyprintTree(head,"");
 		printf("Got [%d] nodes using [%g] kb\n",node_count,(node_count*sizeof(node))/1024.0);
 	}
 

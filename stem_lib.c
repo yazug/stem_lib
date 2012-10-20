@@ -41,8 +41,8 @@ node * add(node * head, const char * stem, int64_t word_count)
     if(head && stem)
     {
         node * next_node = new_node(stem,word_count);
-        next_node->right = head->right;
-        head->right = next_node;
+        next_node->right = head;
+        head = next_node;
     }
     return head;
 }
@@ -75,7 +75,10 @@ node * count(node * head, const char * stem, int64_t word_count)
             }
             else if(cur->stem[0] > stem[0])
             {
-                prev = add(prev,stem,word_count);
+                if(prev == head)
+                        head = add(head,stem,word_count);
+                else
+                    prev = add(prev,stem,word_count);
                 break;
             }
             else

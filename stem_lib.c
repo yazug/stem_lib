@@ -5,6 +5,8 @@
 
 #include "stem_lib.h"
 
+static size_t node_count = 0;
+
 //then build up the tree using word stems
 //if you have a new word that is part of another block split the block move the down entries with the new bock
 //
@@ -174,6 +176,7 @@ void delete_nodes(node * head)
         }
         head->right = free_list;
         free_list = head;
+        node_count--;
     }
 }
 
@@ -214,6 +217,7 @@ node * new_node(const char * stem, int64_t count)
         next_node = free_list;
         free_list = (next_node?next_node->right:NULL);
 
+        node_count++;
         if(next_node)
         {
             memset(next_node,0,sizeof(node));
@@ -299,3 +303,7 @@ size_t prettyprintEntries(node * head, const char * prefix)
     return num_nodes;
 }
 
+size_t getNodesUsed(void)
+{
+    return node_count;
+}

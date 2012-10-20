@@ -22,3 +22,6 @@ size_t prettyprintEntries(node * head, const char * prefix);
 size_t prettyprintTree(node * head, const char * prefix);
 
 void delete_all_storage(void);
+
+size_t getNodesUsed(void);
+

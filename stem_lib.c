@@ -51,12 +51,13 @@ node * count(node * head, const char * stem, int64_t word_count)
 {
     if(NULL == head)
     {
-        head = new_node(stem,1);
+        head = new_node(stem,word_count);
     }
     else if(head && stem)
     {
         node * cur = head;
-        node * prev = cur;
+        node * prev = head;
+
         while(cur)
         {
             if(cur->stem[0] < stem[0])
@@ -75,10 +76,17 @@ node * count(node * head, const char * stem, int64_t word_count)
             }
             else if(cur->stem[0] > stem[0])
             {
-                if(prev == head)
-                        head = add(head,stem,word_count);
+                if(cur == head)
+                {
+                    head = new_node(stem,word_count);
+                    head->right = cur;
+                }
                 else
-                    prev = add(prev,stem,word_count);
+                {
+                    node * next_node = new_node(stem,word_count);
+                    prev->right = next_node;
+                    next_node->right = cur;
+                }
                 break;
             }
             else
@@ -291,16 +299,16 @@ size_t prettyprintEntries(node * head, const char * prefix)
 		printf("%lld|%s%s|\n",head->count,prefix,head->stem);
 	num_nodes++;
 
-        if(head->right)
-        {
-            num_nodes += prettyprintEntries(head->right,prefix);
-        }
-
         if(head->down)
         {
             char word[1024] = {0};
             snprintf(word,sizeof(word),"%s%s",prefix,head->stem);
             num_nodes += prettyprintEntries(head->down,word);
+        }
+
+        if(head->right)
+        {
+            num_nodes += prettyprintEntries(head->right,prefix);
         }
     }
     return num_nodes;

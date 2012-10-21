@@ -130,6 +130,35 @@ void test_double_entry_one_there(void)
     CU_ASSERT_EQUAL(find_node(head,"A"),2);
 }
 
+void test_backwards_level2(void)
+{
+    delete_nodes(head);
+    head = new_node("A",3);
+
+    head = count(head,"AC",1);
+    head = count(head,"AB",1);
+    head = count(head,"AA",1);
+    head = count(head,"AB",1);
+
+    CU_ASSERT_EQUAL(find_node(head,"AC"),1);
+    CU_ASSERT_EQUAL(find_node(head,"AB"),2);
+    CU_ASSERT_EQUAL(find_node(head,"AA"),1);
+    CU_ASSERT_EQUAL(find_node(head,"A"),3);
+}
+void test_backwards(void)
+{
+    delete_nodes(head);
+    head = new_node("C",3);
+
+    head = count(head,"B",1);
+    head = count(head,"A",1);
+    head = count(head,"B",1);
+
+    CU_ASSERT_EQUAL(find_node(head,"C"),3);
+    CU_ASSERT_EQUAL(find_node(head,"B"),2);
+    CU_ASSERT_EQUAL(find_node(head,"A"),1);
+}
+
 void test_set_data(void)
 {
     delete_nodes(head);
@@ -153,7 +182,7 @@ void test_set_data(void)
 
 #if 0
     printf("\n\n");
-    prettyprintEntries(head,"");
+    prettyprintTree(head,"");
     printf("\n");
 #endif
 
@@ -182,9 +211,11 @@ void test_add_long_long_keyword(void)
 
     CU_ASSERT_EQUAL(find_node(head,"ABCDEFGHIJKLMNOP"),2);
 
+#if 0
     printf("\n\n");
     prettyprintTree(head,"");
     printf("\n");
+#endif
 }
 
 void test_long_set_data(void)
@@ -207,9 +238,11 @@ void test_long_set_data(void)
     CU_ASSERT_EQUAL(find_node(head,"ZETA"),1);
     CU_ASSERT_EQUAL(find_node(head,"ABCDEFGHIJ"),1);
 
+#if 0
     printf("\n\n");
     prettyprintTree(head,"");
     printf("\n");
+#endif
 }
 
 void test_single_entries_work()
@@ -278,13 +311,15 @@ int main()
            (NULL == CU_add_test(pSuite, "test of add one on empty case", test_one_empty)) ||
            (NULL == CU_add_test(pSuite, "test of add AA on empty case", test_double_entry_empty)) ||
            (NULL == CU_add_test(pSuite, "test of add AA on A case", test_double_entry_one_there)) ||
-           (NULL == CU_add_test(pSuite, "test of add really long case", test_add_long_long_keyword)) ||
+           (NULL == CU_add_test(pSuite, "test of backwards set of records", test_backwards)) ||
+           (NULL == CU_add_test(pSuite, "test of backwards set of records Second Level", test_backwards_level2)) ||
            (NULL == CU_add_test(pSuite, "test of add a set of records", test_set_data)) ||
            (NULL == CU_add_test(pSuite, "test of add a long set of records", test_long_set_data)) ||
            (NULL == CU_add_test(pSuite, "test of add a set of single numbers", test_single_entries_work)) ||
            (NULL == CU_add_test(pSuite, "test of add a b then a", test_add_b_then_a)) ||
            (NULL == CU_add_test(pSuite, "test of add a set of dup numbers", test_dupes_numbers)) ||
-           (NULL == CU_add_test(pSuite, "test of add a smaller set of records", test_small_set_data))
+           (NULL == CU_add_test(pSuite, "test of add a smaller set of records", test_small_set_data)) ||
+           (NULL == CU_add_test(pSuite, "test of add really long case", test_add_long_long_keyword))
       )
    {
       CU_cleanup_registry();

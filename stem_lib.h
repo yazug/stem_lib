@@ -1,6 +1,7 @@
 
 
 #include <stdint.h>
+#include <stdio.h>
 
 
 typedef struct nodeTAG
@@ -20,6 +21,8 @@ void delete_nodes(node * head);
 node * new_node(const char * stem, int64_t count);
 size_t prettyprintEntries(node * head, const char * prefix);
 size_t prettyprintTree(node * head, const char * prefix);
+
+size_t writeoutEntries(node * head, const char * prefix, FILE* fp);
 
 void delete_all_storage(void);
 

@@ -314,6 +314,33 @@ size_t prettyprintEntries(node * head, const char * prefix)
     return num_nodes;
 }
 
+size_t writeoutEntries(node * head, const char * prefix, FILE* fp)
+{
+    size_t entry_count = 0;
+    if(head && prefix)
+    {
+        if(head->count > 0)
+        {
+            fprintf(fp,"%lld|%s%s|\n",head->count,prefix,head->stem);
+            entry_count++;
+        }
+
+        if(head->down)
+        {
+            char word[1024] = {0};
+            snprintf(word,sizeof(word),"%s%s",prefix,head->stem);
+            entry_count += writeoutEntries(head->down,word,fp);
+        }
+
+        if(head->right)
+        {
+            entry_count += writeoutEntries(head->right,prefix,fp);
+        }
+    }
+    return entry_count;
+}
+
+
 size_t getNodesUsed(void)
 {
     return node_count;

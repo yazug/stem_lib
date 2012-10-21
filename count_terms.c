@@ -47,8 +47,14 @@ int main(int argc, char *argv[])
             fclose(fp);
             fp = NULL;
         }
-        size_t node_count = prettyprintTree(head,"");
-        printf("Got [%d] nodes using [%g] kb\n",node_count,(node_count*sizeof(node))/1024.0);
+
+        {
+            FILE * fp = stdout;
+
+            size_t entry_count = writeoutEntries(head,"", fp);
+            size_t node_count = getNodesUsed();
+            printf("Got [%d] entries [%d] nodes for [%d] rows using [%g] kb [%0.1f] bytes per entry\n",entry_count, node_count, rows, (node_count*sizeof(node))/1024.0, (node_count*sizeof(node))/(double)entry_count);
+        }
     }
 
     return 0;

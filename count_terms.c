@@ -16,13 +16,12 @@ int main(int argc, char *argv[])
     if(argc == 3)
     {
         node * head = NULL;
-        size_t i;
         size_t rows = 0;
 
         FILE * fp = fopen(argv[1],"r");
         if(fp)
         {
-            for(i=0; i<100000; i++)
+            while(1)
             {
                 char buf[1024] = {0};
                 if(NULL != fgets(buf,sizeof(buf),fp))
@@ -38,10 +37,27 @@ int main(int argc, char *argv[])
                 {
                     break;
                 }
-                if(getNodesUsed()*sizeof(node) > 1024*1024*8 )
+                if(getNodesUsed()*sizeof(node) > 1024*1024*256 )
                 {
-                    printf("Got to [%d] row and have used [%d] nodes",i,getNodesUsed());
-                    break;
+                    printf("Got to [%d] row and have used [%d] nodes\n",rows,getNodesUsed());
+
+                    {
+                        FILE * fp = NULL;
+                        char outfile[1024] = {0};
+                        snprintf(outfile,sizeof(outfile),"%s/%s-out",argv[2],"sample");
+                        fp = fopen(outfile,"a");
+                        printf("Writing records to [%s]\n",outfile);
+
+                        size_t entry_count = writeoutEntries(head,"", fp);
+                        size_t node_count = getNodesUsed();
+                        printf("Got [%d] entries [%d] nodes for [%d] rows using [%g] kb [%0.1f] bytes per entry\n",entry_count, node_count, rows, (node_count*sizeof(node))/1024.0, (node_count*sizeof(node))/(double)entry_count);
+                        fclose(fp);
+                        fp = NULL;
+
+                        rows = 0;
+                        delete_nodes(head);
+                        head = NULL;
+                    }
                 }
             }
             fclose(fp);
@@ -49,12 +65,21 @@ int main(int argc, char *argv[])
         }
 
         {
-            FILE * fp = stdout;
+            FILE * fp = NULL;
+            char outfile[1024] = {0};
+            snprintf(outfile,sizeof(outfile),"%s/%s-out",argv[2],"sample");
+            fp = fopen(outfile,"a");
+            printf("Writing records to [%s]\n",outfile);
 
             size_t entry_count = writeoutEntries(head,"", fp);
             size_t node_count = getNodesUsed();
             printf("Got [%d] entries [%d] nodes for [%d] rows using [%g] kb [%0.1f] bytes per entry\n",entry_count, node_count, rows, (node_count*sizeof(node))/1024.0, (node_count*sizeof(node))/(double)entry_count);
+            fclose(fp);
+            fp = NULL;
         }
+        delete_nodes(head);
+        head = NULL;
+        delete_all_storage();
     }
 
     return 0;

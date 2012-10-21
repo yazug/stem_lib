@@ -295,9 +295,9 @@ size_t prettyprintEntries(node * head, const char * prefix)
     size_t num_nodes = 0;
     if(head && prefix)
     {
-	if(head->count > 0)
-		printf("%lld|%s%s|\n",head->count,prefix,head->stem);
-	num_nodes++;
+        if(head->count > 0)
+            printf("%lld|%s%s|\n",head->count,prefix,head->stem);
+        num_nodes++;
 
         if(head->down)
         {

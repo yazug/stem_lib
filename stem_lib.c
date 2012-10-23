@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #include "stem_lib.h"
 
@@ -357,7 +358,11 @@ size_t writeoutRadixFiles(node * head, const char * folder_name)
         while(cur)
         {
             char filename[1024] = {0};
-            snprintf(filename,sizeof(filename),"%s/%s.stem",folder_name,cur->stem);
+            if(isalpha(cur->stem[0]))
+                snprintf(filename,sizeof(filename),"%s/%s.stem",folder_name,cur->stem);
+            else
+                snprintf(filename,sizeof(filename),"%s/other.stub_stem",folder_name);
+
             if(cur->count > 0 || cur->down)
             {
                 fp = fopen(filename,"a");

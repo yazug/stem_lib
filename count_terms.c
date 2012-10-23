@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
                     printf("Got to [%d] row and have used [%d] nodes\n",rows,getNodesUsed());
 
                     {
-                        writeoutRadixFiles(head,argv[2]);
+                        size_t entry_count = writeoutRadixFiles(head,argv[2]);
+                        printf("Got [%d] entries for [%d] rows [%d] nodes total of [%g] kb average of [%0.1f]\n",entry_count, rows, getNodesUsed(),getNodesUsed()*sizeof(node)/1024.0,getNodesUsed()*sizeof(node)/(double)entry_count);
 
                         rows = 0;
                         delete_nodes(head);
@@ -54,7 +55,10 @@ int main(int argc, char *argv[])
             fp = NULL;
         }
 
-        writeoutRadixFiles(head,argv[2]);
+        {
+            size_t entry_count = writeoutRadixFiles(head,argv[2]);
+            printf("Got [%d] entries for [%d] rows [%d] nodes total of [%g] kb average of [%0.1f]\n",entry_count, rows, getNodesUsed(),getNodesUsed()*sizeof(node)/1024.0,getNodesUsed()*sizeof(node)/(double)entry_count);
+        }
         delete_nodes(head);
         head = NULL;
         delete_all_storage();

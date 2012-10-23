@@ -9,3 +9,4 @@ Program('runner',['test_count.c',]+stem_lib_objs, LIBS=['cunit',],CCFLAGS=flags,
 
 Program('count_terms', ['count_terms.c',]+stem_lib_objs,CCFLAGS=flags,LDFLAGS=flags)
 
+Program('extract_top_numbers', 'priority_count.cpp',CXXFLAGS=flags)

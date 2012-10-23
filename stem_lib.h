@@ -23,6 +23,7 @@ size_t prettyprintEntries(node * head, const char * prefix);
 size_t prettyprintTree(node * head, const char * prefix);
 
 size_t writeoutEntries(node * head, const char * prefix, FILE* fp);
+size_t writeoutRadixFiles(node * head, const char * folder_name);
 
 void delete_all_storage(void);
 

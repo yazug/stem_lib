@@ -42,17 +42,7 @@ int main(int argc, char *argv[])
                     printf("Got to [%d] row and have used [%d] nodes\n",rows,getNodesUsed());
 
                     {
-                        FILE * fp = NULL;
-                        char outfile[1024] = {0};
-                        snprintf(outfile,sizeof(outfile),"%s/%s-out",argv[2],"sample");
-                        fp = fopen(outfile,"a");
-                        printf("Writing records to [%s]\n",outfile);
-
-                        size_t entry_count = writeoutEntries(head,"", fp);
-                        size_t node_count = getNodesUsed();
-                        printf("Got [%d] entries [%d] nodes for [%d] rows using [%g] kb [%0.1f] bytes per entry\n",entry_count, node_count, rows, (node_count*sizeof(node))/1024.0, (node_count*sizeof(node))/(double)entry_count);
-                        fclose(fp);
-                        fp = NULL;
+                        writeoutRadixFiles(head,argv[2]);
 
                         rows = 0;
                         delete_nodes(head);
@@ -64,19 +54,7 @@ int main(int argc, char *argv[])
             fp = NULL;
         }
 
-        {
-            FILE * fp = NULL;
-            char outfile[1024] = {0};
-            snprintf(outfile,sizeof(outfile),"%s/%s-out",argv[2],"sample");
-            fp = fopen(outfile,"a");
-            printf("Writing records to [%s]\n",outfile);
-
-            size_t entry_count = writeoutEntries(head,"", fp);
-            size_t node_count = getNodesUsed();
-            printf("Got [%d] entries [%d] nodes for [%d] rows using [%g] kb [%0.1f] bytes per entry\n",entry_count, node_count, rows, (node_count*sizeof(node))/1024.0, (node_count*sizeof(node))/(double)entry_count);
-            fclose(fp);
-            fp = NULL;
-        }
+        writeoutRadixFiles(head,argv[2]);
         delete_nodes(head);
         head = NULL;
         delete_all_storage();

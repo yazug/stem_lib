@@ -273,7 +273,7 @@ size_t prettyprintTree(node * head, const char * prefix)
     if(head && prefix)
     {
         printf("%lld|%s %s|\n",head->count,prefix,head->stem);
-	num_nodes ++;
+        num_nodes ++;
 
         if(head->right)
         {
@@ -321,7 +321,7 @@ size_t writeoutEntries(node * head, const char * prefix, FILE* fp)
     {
         if(head->count > 0)
         {
-            fprintf(fp,"%lld|%s%s|\n",head->count,prefix,head->stem);
+            fprintf(fp,"%lld|%s%s\n",head->count,prefix,head->stem);
             entry_count++;
         }
 
@@ -344,4 +344,37 @@ size_t writeoutEntries(node * head, const char * prefix, FILE* fp)
 size_t getNodesUsed(void)
 {
     return node_count;
+}
+
+size_t writeoutRadixFiles(node * head, const char * folder_name)
+{
+    size_t entry_count = 0;
+    if(head)
+    {
+        FILE * fp = NULL;
+
+        node * cur = head;
+        while(cur)
+        {
+            char filename[1024] = {0};
+            snprintf(filename,sizeof(filename),"%s/%s.stem",folder_name,cur->stem);
+            if(cur->count > 0 || cur->down)
+            {
+                fp = fopen(filename,"a");
+                if(cur->count > 0)
+                {
+                    fprintf(fp,"%lld|%s\n",cur->count,cur->stem);
+                    entry_count++;
+                }
+                entry_count += writeoutEntries(cur->down,cur->stem,fp);
+
+                fclose(fp);
+                fp = NULL;
+            }
+
+            cur = cur->right;
+        }
+    }
+    return entry_count;
+
 }
